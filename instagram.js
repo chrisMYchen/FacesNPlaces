@@ -9,10 +9,11 @@
  - returns: all the photos , latitude , and longtitude 
 
 */
+	var request = require("request");
 
 function getPhotos(location){
 
-	var request = require("request");
+
 
 	var latArray = [];
 	var longArray = [];
@@ -27,30 +28,35 @@ function getPhotos(location){
 	     'cache-control': 'no-cache' } };
 
 
-	request(options, function (error, response, body) {
-	  if (error) throw new Error(error);
-	 // console.log(JSON.parse(body).data);
-	 // console.log(body.data.size);
-	 var jsonObject = JSON.parse(body);
+	return new Promise(function (resolve, reject) {
+		request(options, function (error, response, body) {
+		  	if (error) reject(error);
+			 // console.log(JSON.parse(body).data);
+			 // console.log(body.data.size);
+			 try {
 
-	 for(i = 0;i < jsonObject.data.length; i++){
-	 	latArray.push(jsonObject.data[i].location.latitude);
-	 	longArray.push(jsonObject.data[i].location.longitude);
-	 	imageArray.push(jsonObject.data[i].images.standard_resolution.url);
-	 }
+			 var jsonObject = JSON.parse(body);	
+			 }
+			 catch (err) {
+				reject(body);
+			 }
 
-	  console.log(latArray);
-	  console.log(longArray);
-	  console.log(imageArray);
-	  
+			for(i = 0;i < jsonObject.data.length; i++){
+			 	latArray.push(jsonObject.data[i].location.latitude);
+			 	longArray.push(jsonObject.data[i].location.longitude);
+			 	imageArray.push(jsonObject.data[i].images.standard_resolution.url);
+			}
+
+			// console.log(latArray);
+			// console.log(longArray);
+			// console.log(imageArray);
+
+			resolve({latArray,longArray,imageArray});
+		  
+		});
 	});
-
-
-	return {latArray,longArray,imageArray};
 }
 
-getPhotos(206258876);
-
-
-
-
+module.exports = {
+	getPhotos: getPhotos
+}

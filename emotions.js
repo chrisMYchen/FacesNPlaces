@@ -80,15 +80,28 @@ function processImage(image) {
 	}
 
 function findMax(dictionary){
-	var maxEmotion = '';
-	var max = 0
-	for (var key in dictionary) {
-		if(dictionary[key] > max){
-			max = dictionary[key];
-			maxEmotion = key;
-		}  
-	}
-	return maxEmotion;
+	var emotionNames = Object.keys(dictionary);
+	
+	emotionNames.sort(function (emotionA, emotionB) {
+		if (dictionary[emotionA] < dictionary[emotionB])
+		  return -1;
+	  if (dictionary[emotionA] > dictionary[emotionB])
+	    return 1;
+
+	  return 0;
+	});
+
+	return emotionNames.reverse().slice(0, 3);
+	// var maxEmotion = '';
+	// var max = 0
+	// for (var key in dictionary) {
+	// 	if(dictionary[key] > max){
+	// 		max = dictionary[key];
+	// 		maxEmotion = key;
+	// 	}  
+	// }
+	// return maxEmotion;
+	//return emotionNames
 }
 
 instagram.getPhotos(206258876)

@@ -1,0 +1,11 @@
+{
+  "name": "FacesNPlaces",
+  "version": "0.0.1",
+  "main":"server.js",
+  "author":"Test",
+  "description": "For test ",
+  "dependencies": {
+    "express": "latest",
+    "body-parser": "latest"
+  }
+}

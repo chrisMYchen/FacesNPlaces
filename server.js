@@ -13,12 +13,13 @@ app.get('/', function (req, res) {
 });
 
 app.post('/dataload', urlencodedParser, function(req, res){
-    response = {
-        latitude:req.body.latitude,
-        longitude:req.body.longitude
-    };
+
+    var latitude = req.body.latitude;
+    var longitude = req.body.longitude;
+    var emotionData = getEmotionData(latitude, longitude);
+
     console.log('body: ' + JSON.stringify(req.body));
-    res.send(response);
+    res.send(emotionData);
 });
 
 app.post('/process_post', urlencodedParser, function (req, res) {

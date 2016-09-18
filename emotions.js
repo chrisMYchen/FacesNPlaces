@@ -12,10 +12,10 @@ takes a lot of image urls and finds the most common emotion in them
 
 function findMyEmotion(images) {
 	var promises = images.map(processImage);
-
+	var finalresults = {};
 	return Promise.all(promises)
 		.then(function (analysis) {
-			return analysis.reduce(function (imageAnalysis, cur) {
+			var results = analysis.reduce(function (imageAnalysis, cur) {
 				Object.keys(imageAnalysis).forEach(function (attitude) {
 					cur[attitude] += imageAnalysis[attitude];
 				});
@@ -30,18 +30,20 @@ function findMyEmotion(images) {
 				'sadness':0,
 				'surprise':0
 			});
+			finalresults = results;
+			return results
 		})
 		.then(function (value) {
-			console.log(value);
+			// console.log(value);
 			return value;
 		})
-		.then(findMax)
+		.then(findMax);
 }
 
 function processImage(image) {
 		var options = { method: 'POST',
 			url: 'https://api.projectoxford.ai/emotion/v1.0/recognize',
-			headers: 
+			headers:
 			 { 'postman-token': '2498de8f-3599-b6dc-5f99-36f29a22390f',
 				 'cache-control': 'no-cache',
 				 'content-type': 'application/json',
@@ -81,7 +83,7 @@ function processImage(image) {
 
 function findMax(dictionary){
 	var emotionNames = Object.keys(dictionary);
-	
+
 	emotionNames.sort(function (emotionA, emotionB) {
 		if (dictionary[emotionA] < dictionary[emotionB])
 		  return -1;
@@ -98,7 +100,7 @@ function findMax(dictionary){
 	// 	if(dictionary[key] > max){
 	// 		max = dictionary[key];
 	// 		maxEmotion = key;
-	// 	}  
+	// 	}
 	// }
 	// return maxEmotion;
 	//return emotionNames
@@ -106,7 +108,7 @@ function findMax(dictionary){
 //206258876
 
 function topThreePhotos(location){
-	instagram.getPhotos(location)
+	return instagram.getPhotos(location)
 	.then(function (instagramData) {
 		return instagramData.imageArray.slice(0,3);
 	})
@@ -114,24 +116,37 @@ function topThreePhotos(location){
 
 
 function topThreeEmotions(location){
-instagram.getPhotos(location)
+	var results = {};
+ return instagram.getPhotos(location)
 	.then(function (instagramData) {
-		return findMyEmotion(instagramData.imageArray);
+		results = findMyEmotion(instagramData.imageArray);
+		return results;
 	})
 	.then(function (emotions) {
-		console.log("Final emotion: ", emotions);
+		// console.log("Final emotion: ", emotions);
 		return emotions;
 	})
 	.catch(function (error) {
-		console.log(error)
+		// console.log(error)
 	})
+	// return results;
 }
 
-var stuff = topThreeEmotions(206258876);
-var things = topThreePhotos(206258876);
 
+// var stuff = topThreeEmotions(206258876);
+// console.log(stuff);
+// var thingsPromise = topThreePhotos(206258876);
+// thingsPromise.then(function(photos) {
+// 	console.log(photos);
+// });
+// var stuffPromise = topThreeEmotions(206258876);
+// stuffPromise.then(function(emotions) {
+	// console.log(emotions);
+// });
+// console.log(things);
 
-
-
-
-
+module.exports = {
+	findMyEmotion: findMyEmotion,
+	topThreeEmotions: topThreeEmotions,
+	topThreePhotos: topThreePhotos
+}

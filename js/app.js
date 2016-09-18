@@ -7,19 +7,23 @@ const HAPPY = 'happy';
 const SAD = 'sad';
 const DISGUST = 'disgust';
 const SURPRISE = 'surprise';
+const NEUTRAL = 'neutral';
 
 function getPinColor(emotion) {
   if (emotion === HAPPY) {
-    return "FFEB3B";
+    return "ff9800";
   }
   else if (emotion === SAD) {
-    return "283593";
+    return "2196F3";
   }
   else if (emotion === DISGUST) {
-    return "9E9D24";
+    return "009688";
   }
   else if (emotion === SURPRISE) {
     return "D81B60";
+  }
+  else {
+    return "A1887F";
   }
 }
 
@@ -36,9 +40,10 @@ function initMap() {
 
   var numLocations = 1;
   for (i = 0;i < numLocations; i ++) {
-    var locationLat = centerLat;
-    var locationLng = centerLng;
+    var locationLat = emotionData.lat;
+    var locationLng = emotionData.lng;
     var pinColor = getPinColor(emotionData.emotion);
+    console.log('pin color:', pinColor);
     var pinImage = new google.maps.MarkerImage("http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|" + pinColor,
         new google.maps.Size(21, 34),
         new google.maps.Point(0,0),
@@ -52,18 +57,21 @@ function initMap() {
       map: map,
       icon: pinImage,
       shadow: pinShadow
-
     });
     console.log(emotionData.emotion);
+    var capEmotion = capitalizeFirstLetter(emotionData.emotion);
     google.maps.event.addListener(marker, 'click',  (function(marker, i){
       return function() {
-        infoWindow.setContent(emotionData.emotion);
+        infoWindow.setContent('We are feeling: ' + capEmotion);
         infoWindow.open(map, marker);
       }
     })(marker, i));
   }
 }
 
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
 
 function setTopEmotions() {
   for (i = 0; i < emotionData.topEmotions.length; i ++) {
@@ -85,6 +93,9 @@ function setSingleEmotion(emotion, boxnum, value) {
   }
   else if (emotion == DISGUST) {
     faicon = 'fa-qq';
+  }
+  else {
+    faicon = 'fa-meh-o';
   }
   console.log(idString);
   $(idString).html(`
@@ -125,8 +136,8 @@ $(document).ready(function(){
         lat: 42.3601,
         lng: -71.0942,
         emotion: 'disgust',
-        topEmotions: ['disgust', 'happy', 'sad'],
-        topEmotionsValues: [50, 29, 40],
+        topEmotions: ['happy', 'neutral', 'sad'],
+        topEmotionsValues: [66, 30, 2],
         recentPhotos: ["http://images.hellogiggles.com/uploads/2015/03/22/featured.jpg", "http://images.hellogiggles.com/uploads/2015/03/22/featured.jpg", "http://images.hellogiggles.com/uploads/2015/03/22/featured.jpg"]
       };
       console.log('yo');

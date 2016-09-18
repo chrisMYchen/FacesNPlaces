@@ -30,15 +30,19 @@ function getPhotos(location){
 
 	return new Promise(function (resolve, reject) {
 		request(options, function (error, response, body) {
-		  	if (error) reject(error);
+		  	if (error) {
+		  		reject(error);
+		  		return;
+		  	}
 			 // console.log(JSON.parse(body).data);
 			 // console.log(body.data.size);
 			 try {
 
-			 var jsonObject = JSON.parse(body);	
+			 	var jsonObject = JSON.parse(body);	
 			 }
 			 catch (err) {
 				reject(body);
+				return;
 			 }
 
 			for(i = 0;i < jsonObject.data.length; i++){
@@ -46,10 +50,6 @@ function getPhotos(location){
 			 	longArray.push(jsonObject.data[i].location.longitude);
 			 	imageArray.push(jsonObject.data[i].images.standard_resolution.url);
 			}
-
-			// console.log(latArray);
-			// console.log(longArray);
-			// console.log(imageArray);
 
 			resolve({latArray,longArray,imageArray});
 		  

@@ -32,7 +32,7 @@ function findMyEmotion(images) {
 			});
 		})
 		.then(function (value) {
-			console.log(value);
+		//	console.log(value);
 			return value;
 		})
 		.then(findMax)
@@ -67,7 +67,7 @@ function processImage(image) {
 				if (error) reject(error);
 
 				if (!jsonObject) reject("no response")
-				//console.log(jsonObject);
+	//			console.log(jsonObject);
 				jsonObject.forEach(function (obj) {
 					Object.keys(emotions).forEach(function (attitude) {
 						emotions[attitude] += obj.scores[attitude];
@@ -92,44 +92,39 @@ function findMax(dictionary){
 	});
 
 	return emotionNames.reverse().slice(0, 3);
-	// var maxEmotion = '';
-	// var max = 0
-	// for (var key in dictionary) {
-	// 	if(dictionary[key] > max){
-	// 		max = dictionary[key];
-	// 		maxEmotion = key;
-	// 	}  
-	// }
-	// return maxEmotion;
-	//return emotionNames
 }
 //206258876
 
-function topThreePhotos(location){
-	instagram.getPhotos(location)
-	.then(function (instagramData) {
-		return instagramData.imageArray.slice(0,3);
-	})
-}
+var lait = 0
+var long = 0
+var myTopEmotions = []
 
-
-function topThreeEmotions(location){
-instagram.getPhotos(location)
+function info(location){
+	var lait = 0
+	var long = 0
+	var myTopEmotions = []
+	return instagram.getPhotos(206258876)
 	.then(function (instagramData) {
+		lait = instagramData.latArray[0];
+		long = instagramData.longArray[0];
 		return findMyEmotion(instagramData.imageArray);
 	})
 	.then(function (emotions) {
 		console.log("Final emotion: ", emotions);
-		return emotions;
+		myTopEmotions = emotions; 
+		return {lait,long,myTopEmotions}
+	})
+	.then(function (topEmotions){
+		console.log(topEmotions);
 	})
 	.catch(function (error) {
 		console.log(error)
 	})
 }
 
-var stuff = topThreeEmotions(206258876);
-var things = topThreePhotos(206258876);
 
+
+console.log(info(206258876));
 
 
 

@@ -1,0 +1,24 @@
+html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
+#map {
+  height: 600px;
+}
+
+.bigpad {
+  padding: 0 50px 0 50px;
+}
+
+.emotion-sad{
+  background-color: #283593;
+}
+
+.emotion-happy{
+  background-color: #FFEB3B;
+}
+
+.emotion-disgust{
+  background-color: #9E9D24;
+}
+
+.emotion-suprise{
+  background-color: #D81B60;
+}

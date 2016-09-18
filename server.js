@@ -5,8 +5,17 @@ var bodyParser = require('body-parser');
 // Create application/x-www-form-urlencoded parser
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
+function getEmotionData(latitude, longitude) {
+  var results = {
+      lat: 42.3601,
+      lng: -71.0942,
+      emotion: 'happy'
+    };
+  return results;
+}
 app.use(express.static('public'));
 app.use(express.static('js'));
+app.use(express.static('css'));
 
 app.get('/', function (req, res) {
    res.sendFile( __dirname + "/" + "index.html" );

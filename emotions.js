@@ -67,7 +67,7 @@ function processImage(image) {
 				if (error) reject(error);
 
 				if (!jsonObject) reject("no response")
-
+				//console.log(jsonObject);
 				jsonObject.forEach(function (obj) {
 					Object.keys(emotions).forEach(function (attitude) {
 						emotions[attitude] += obj.scores[attitude];
@@ -103,20 +103,32 @@ function findMax(dictionary){
 	// return maxEmotion;
 	//return emotionNames
 }
+//206258876
 
-instagram.getPhotos(206258876)
+function topThreePhotos(location){
+	instagram.getPhotos(location)
+	.then(function (instagramData) {
+		return instagramData.imageArray.slice(0,3);
+	})
+}
+
+
+function topThreeEmotions(location){
+instagram.getPhotos(location)
 	.then(function (instagramData) {
 		return findMyEmotion(instagramData.imageArray);
 	})
 	.then(function (emotions) {
 		console.log("Final emotion: ", emotions);
+		return emotions;
 	})
 	.catch(function (error) {
 		console.log(error)
 	})
+}
 
-
-
+var stuff = topThreeEmotions(206258876);
+var things = topThreePhotos(206258876);
 
 
 

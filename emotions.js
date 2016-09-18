@@ -98,6 +98,7 @@ function findMax(dictionary){
 var lait = 0
 var long = 0
 var myTopEmotions = []
+var myTopImages = []
 
 function info(location){
 	var lait = 0
@@ -107,12 +108,13 @@ function info(location){
 	.then(function (instagramData) {
 		lait = instagramData.latArray[0];
 		long = instagramData.longArray[0];
+		myTopImages = instagramData.imageArray.slice(0,3);
 		return findMyEmotion(instagramData.imageArray);
 	})
 	.then(function (emotions) {
 		console.log("Final emotion: ", emotions);
 		myTopEmotions = emotions; 
-		return {lait,long,myTopEmotions}
+		return {lait,long,myTopEmotions,myTopImages}
 	})
 	.then(function (topEmotions){
 		console.log(topEmotions);
